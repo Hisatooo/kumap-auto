@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { buildCaption, buildIssueBody } from "./draft.js";
-import { PostSchema } from "./generate.js";
+import { PostSchema } from "./schema.js";
+import { buildCaption, buildSiteHtml } from "./site.js";
 import { buildSlidesHtml } from "./render.js";
 import { htmlToText, parseFeed } from "./sources.js";
 
@@ -33,11 +33,18 @@ test("htmlToText keeps only the main content", () => {
   assert.equal(htmlToText(html), "題\n本文 です");
 });
 
-test("issue body has every image link in order and the caption in a copyable block", () => {
-  const body = buildIssueBody(samplePost, ["https://x/1.jpg", "https://x/2.jpg"]);
-  assert.match(body, /\[1枚目\]\(https:\/\/x\/1\.jpg\) ・ \[2枚目\]\(https:\/\/x\/2\.jpg\)/);
-  assert.ok(body.includes("```text\n" + buildCaption(samplePost) + "\n```"));
-  assert.match(body, /\[授業料免除について\]\(https:\/\/www\.kumamoto-u\.ac\.jp\/example\)/);
+test("site page lists posts with image paths, escaped caption and a copy button", () => {
+  const html = buildSiteHtml([{ id: "20261101-0700", post: samplePost, images: ["posts/20261101-0700/1.jpg", "posts/20261101-0700/2.jpg"] }]);
+  assert.match(html, /<title>クマップ 投稿ストック<\/title>/);
+  assert.match(html, /src="posts\/20261101-0700\/2\.jpg"/);
+  assert.match(html, /2026\.11\.01/);
+  assert.match(html, /授業料免除 申請はお早めに/);
+  assert.ok(html.includes(buildCaption(samplePost).replace(/</g, "&lt;")));
+  assert.match(html, /class="copy"/);
+});
+
+test("site page shows an empty state with no posts", () => {
+  assert.match(buildSiteHtml([]), /まだ投稿案はありません/);
 });
 
 test("hashtags always get a single #", () => {

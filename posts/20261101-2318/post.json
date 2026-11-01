@@ -1,0 +1,60 @@
+{
+  "skip": false,
+  "skip_reason": "",
+  "source_url": "https://www.kumamoto-u.ac.jp/daigakuseikatsu/kagaikatudou/hrm9qu",
+  "source_title": "第十五回紫熊祭についてのお知らせ",
+  "category": "EVENT",
+  "cover": {
+    "title": "紫熊祭は\\n11/3まで！",
+    "lead": "今年のテーマ・企画・来場の注意点をまとめました"
+  },
+  "slides": [
+    {
+      "type": "info",
+      "heading": "第十五回 紫熊祭",
+      "rows": [
+        {
+          "label": "日程",
+          "value": "11月1日(日)〜3日(火・祝)"
+        },
+        {
+          "label": "企画",
+          "value": "野外ステージ・テント出店・屋内展示"
+        },
+        {
+          "label": "来場",
+          "value": "公共交通機関で（駐車場なし）"
+        },
+        {
+          "label": "詳細",
+          "value": "特設ページ sigmafes.com"
+        }
+      ],
+      "deadline": null
+    },
+    {
+      "type": "point",
+      "subtitle": "THEME",
+      "heading": "今年のテーマ",
+      "body": "今年のテーマは『Xceed the Vision』。「想像を超えていけ」という意味で、頭文字のXとVでローマ数字の15を表しています。第15回の節目に、一人ひとりの理想も超えた大学祭をつくりたいという願いが込められています。",
+      "check": "XとVで「15」になる仕掛けに注目"
+    },
+    {
+      "type": "point",
+      "subtitle": "ACCESS",
+      "heading": "来場の注意",
+      "body": "熊本大学の駐車場は利用できません。来場するときはバスや電車など公共交通機関を使いましょう。ステージや出店など企画の詳しい情報は、第十五回紫熊祭特設ページ（sigmafes.com）で確認できます。",
+      "check": "車はNG。公共交通機関で来場しよう"
+    }
+  ],
+  "caption": "第十五回紫熊祭、11月3日(火・祝)まで開催中！\n\n今年のテーマは『Xceed the Vision』。「想像を超えていけ」という意味で、XとVでローマ数字の15を表しています。\n\n・野外ステージのパフォーマンス\n・テント出店、屋内展示、特別企画\n・大学の駐車場は使えないので公共交通機関で来場を\n\n企画の詳細は特設ページ（sigmafes.com）をチェック。\n保存して見返してね\n\n出典：熊本大学公式HP",
+  "hashtags": [
+    "熊本大学",
+    "熊大",
+    "熊大生",
+    "紫熊祭",
+    "大学祭",
+    "学園祭",
+    "熊本イベント"
+  ]
+}

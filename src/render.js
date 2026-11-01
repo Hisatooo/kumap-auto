@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { chromium } from "playwright";
 import { SLIDE_HEIGHT, SLIDE_WIDTH } from "./config.js";
-import { CATEGORIES } from "./generate.js";
+import { CATEGORIES } from "./schema.js";
 
 // Illustrations are cut straight from the design templates (assets/*.png).
 const ASSET_DIR = new URL("../assets/", import.meta.url);
