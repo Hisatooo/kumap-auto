@@ -7,8 +7,6 @@
   },
   "scripts": {
     "draft": "node src/draft.js",
-    "publish-post": "node src/publish.js",
-    "refresh-token": "node src/refresh-token.js",
     "test": "node --test \"src/*.test.js\""
   },
   "dependencies": {

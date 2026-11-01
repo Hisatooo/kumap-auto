@@ -5,29 +5,28 @@ import { generatePost } from "./generate.js";
 import { renderSlides } from "./render.js";
 import { collectCandidates } from "./sources.js";
 
-export const POST_ID_PATTERN = /^\d{8}-\d{4}$/;
-
 export function buildCaption(post) {
   const tags = post.hashtags.map((t) => (t.startsWith("#") ? t : `#${t}`)).join(" ");
   return `${post.caption.trim()}\n\n${tags}`;
 }
 
-export function buildIssueBody(postId, post, imageUrls) {
-  const images = imageUrls.map((u, i) => `<img src="${u}" width="270" alt="slide ${i + 1}">`).join(" ");
-  return `<!-- kumap-post:${postId} -->
-**出典**: ${post.source_url}
+export function buildIssueBody(post, imageUrls) {
+  const images = imageUrls.map((u, i) => `<a href="${u}"><img src="${u}" width="270" alt="${i + 1}枚目"></a>`).join(" ");
+  const downloads = imageUrls.map((u, i) => `[${i + 1}枚目](${u})`).join(" ・ ");
+  return `**出典**: [${post.source_title}](${post.source_url})
 
 ${images}
 
-## キャプション（ここを編集すると投稿文も変わります）
+**画像（この順番で投稿）**: ${downloads}
+
+## キャプション（右上のボタンでコピー）
 \`\`\`text
 ${buildCaption(post)}
 \`\`\`
 
 ---
-- 投稿する → ラベル **approve** を付ける
-- 見送る → ラベルを付けずにこの Issue を閉じる
-- 日付・金額・対象者は必ず出典と見比べてください
+- 日付・金額・対象者は必ず出典と見比べてから投稿してください
+- 投稿したら、または見送るならこの Issue を閉じる
 `;
 }
 
@@ -65,7 +64,8 @@ async function main() {
   const files = await renderSlides(post, dir, { date });
 
   const imageUrls = files.map((f) => `${imageBaseUrl}/${f}`);
-  await writeFile(`${dir}/issue.md`, buildIssueBody(postId, post, imageUrls));
+  await writeFile(`${dir}/caption.txt`, buildCaption(post) + "\n");
+  await writeFile(`${dir}/issue.md`, buildIssueBody(post, imageUrls));
   await writeFile(SEEN_FILE, JSON.stringify({ seen: [...state.seen, post.source_url] }, null, 2) + "\n");
 
   await setOutput("post_id", postId);

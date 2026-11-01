@@ -2,7 +2,6 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { buildCaption, buildIssueBody } from "./draft.js";
 import { PostSchema } from "./generate.js";
-import { parseIssueBody } from "./publish.js";
 import { buildSlidesHtml } from "./render.js";
 import { htmlToText, parseFeed } from "./sources.js";
 
@@ -34,16 +33,11 @@ test("htmlToText keeps only the main content", () => {
   assert.equal(htmlToText(html), "題\n本文 です");
 });
 
-test("issue body round-trips the post id and an edited caption", () => {
-  const body = buildIssueBody("20261101-0700", samplePost, ["https://x/1.jpg"]);
-  assert.deepEqual(parseIssueBody(body), { postId: "20261101-0700", caption: buildCaption(samplePost) });
-
-  const edited = body.replace("授業料免除の申請が始まりました。", "編集済み").replace(/\n/g, "\r\n");
-  assert.match(parseIssueBody(edited).caption, /^編集済み/);
-});
-
-test("parseIssueBody rejects path-like post ids", () => {
-  assert.throws(() => parseIssueBody("<!-- kumap-post:../../etc -->\n```text\nx\n```"), /投稿ID/);
+test("issue body has every image link in order and the caption in a copyable block", () => {
+  const body = buildIssueBody(samplePost, ["https://x/1.jpg", "https://x/2.jpg"]);
+  assert.match(body, /\[1枚目\]\(https:\/\/x\/1\.jpg\) ・ \[2枚目\]\(https:\/\/x\/2\.jpg\)/);
+  assert.ok(body.includes("```text\n" + buildCaption(samplePost) + "\n```"));
+  assert.match(body, /\[授業料免除について\]\(https:\/\/www\.kumamoto-u\.ac\.jp\/example\)/);
 });
 
 test("hashtags always get a single #", () => {
