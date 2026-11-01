@@ -32,4 +32,5 @@
 - テスト: `npm test`
 
 ## 全自動に切り替えるとき
-`draft.yml` の最後で `gh issue edit --add-label approve` を足せば、承認なしで投稿される。
+`draft.yml` の最後に `ISSUE_BODY="$(cat posts/$POST_ID/issue.md)" node src/publish.js`（IG の Secrets を env に渡す）を足せば、承認なしで投稿される。
+※ Actions のトークンで approve ラベルを付けても publish.yml は起動しないので、ラベル方式は使えない。
