@@ -79,7 +79,9 @@ function doc(body, { dark = false } = {}) {
 <style>${STYLE}</style></head><body class="${dark ? "dark" : ""}">${body}</body></html>`;
 }
 
-const iconStyle = () => (ASSETS.icon ? `background-image:url(${ASSETS.icon})` : "");
+// The logo has its own purple ring, so the template's thin black ring is hidden unless asked to keep it.
+const iconStyle = ({ keepBorder = false } = {}) =>
+  ASSETS.icon ? `background-image:url(${ASSETS.icon});${keepBorder ? "" : "border-color:transparent;"}` : "";
 const footer = (page, total) => `<div class="abs footer"><span>@kumap_info</span><span class="page">${page} / ${total}</span></div>`;
 const header = (label) => `
 <div class="abs icon" style="left:72px;top:44px;width:64px;height:64px;${iconStyle()}"></div>
@@ -163,7 +165,7 @@ function lastPage(post, { page, total }) {
   return doc(
     `${ASSETS.leavesDarkTl ? `<img class="abs" style="left:10px;top:20px" src="${ASSETS.leavesDarkTl}">` : ""}
 ${ASSETS.leavesDarkR ? `<img class="abs" style="left:945px;top:405px" src="${ASSETS.leavesDarkR}">` : ""}
-<div class="abs icon" style="left:370px;top:80px;width:340px;height:340px;border:10px solid var(--bg);${iconStyle()}"></div>
+<div class="abs icon" style="left:370px;top:80px;width:340px;height:340px;border:10px solid var(--bg);${iconStyle({ keepBorder: true })}"></div>
 <div class="abs logo" style="left:0;right:0;top:456px;text-align:center;font-size:42px;color:var(--bg)">熊大生の毎日に、使える情報を。</div>
 <div class="abs" style="left:0;right:0;top:524px;text-align:center;font-size:76px;font-weight:900">保存して、あとで見返そう。</div>
 <div class="abs" style="left:72px;top:680px;display:flex;gap:24px">
