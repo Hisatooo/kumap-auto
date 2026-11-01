@@ -10,9 +10,13 @@ const samplePost = PostSchema.parse({
   skip: false,
   skip_reason: "",
   source_url: "https://www.kumamoto-u.ac.jp/example",
-  tag: "お金",
-  cover: { title: "授業料免除\\n申請はお早めに", subtitle: "後期の締切に注意" },
-  slides: [{ heading: "対象", points: ["学部生 <全員>", "大学院生"] }],
+  source_title: "授業料免除について",
+  category: "MONEY",
+  cover: { title: "授業料免除\\n申請はお早めに", lead: "後期の締切に注意" },
+  slides: [
+    { type: "point", subtitle: "TARGET", heading: "対象", body: "学部生 <全員>", check: "確認しよう" },
+    { type: "info", heading: "基本情報", rows: [{ label: "対象", value: "学部生" }, { label: "申込", value: "HPから" }], deadline: null },
+  ],
   caption: "授業料免除の申請が始まりました。\n保存して見返してね",
   hashtags: ["熊本大学", "#熊大生"],
 });
@@ -46,11 +50,19 @@ test("hashtags always get a single #", () => {
   assert.match(buildCaption(samplePost), /#熊本大学 #熊大生$/);
 });
 
-test("slides escape HTML and mark only the last page with the handle", () => {
-  const pages = buildSlidesHtml(samplePost);
-  assert.equal(pages.length, 2);
-  assert.match(pages[0], /授業料免除<br>申請はお早めに/);
+test("pages: cover + one per slide + closing page, with escaped text and page numbers", () => {
+  const pages = buildSlidesHtml(samplePost, { date: "2026.11.01" });
+  assert.equal(pages.length, 4);
+  assert.match(pages[0], /授業料免除<br><span class="hl">申請はお早めに<\/span>/);
+  assert.match(pages[0], /MONEY お金/);
   assert.match(pages[1], /学部生 &lt;全員&gt;/);
-  assert.match(pages[0], /Next page→/);
-  assert.match(pages[1], /@kumap_info/);
+  assert.match(pages[2], /INFORMATION/);
+  assert.doesNotMatch(pages[2], /DEADLINE/); // deadline: null hides the bar
+  assert.match(pages[3], /熊本大学公式HP「授業料免除について」/);
+  pages.forEach((p, i) => assert.match(p, new RegExp(`${i + 1} / 4`)));
+});
+
+test("sample post fixture still matches the schema", async () => {
+  const { readFile } = await import("node:fs/promises");
+  PostSchema.parse(JSON.parse(await readFile(new URL("../test/sample-post.json", import.meta.url), "utf8")));
 });

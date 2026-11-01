@@ -61,7 +61,8 @@ async function main() {
   const dir = `${POSTS_DIR}/${postId}`;
   await mkdir(dir, { recursive: true });
   await writeFile(`${dir}/post.json`, JSON.stringify(post, null, 2));
-  const files = await renderSlides(post, dir);
+  const date = `${postId.slice(0, 4)}.${postId.slice(4, 6)}.${postId.slice(6, 8)}`;
+  const files = await renderSlides(post, dir, { date });
 
   const imageUrls = files.map((f) => `${imageBaseUrl}/${f}`);
   await writeFile(`${dir}/issue.md`, buildIssueBody(postId, post, imageUrls));

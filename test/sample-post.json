@@ -1,0 +1,28 @@
+{
+  "skip": false,
+  "skip_reason": "",
+  "source_url": "https://www.kumamoto-u.ac.jp/daigakuseikatsu/nyugaku_zyugyou/nyugakuryo_menjo/io2v42",
+  "source_title": "【重要】令和７年度からの多子世帯に対する大学等の無償化について",
+  "category": "MONEY",
+  "cover": { "title": "授業料が\nタダになるかも", "lead": "多子世帯の無償化、対象と申請の流れを3分でまとめました" },
+  "slides": [
+    { "type": "point", "subtitle": "ABOUT", "heading": "どんな制度？", "body": "扶養している子どもが3人以上いる世帯の学生は、所得の制限なく授業料と入学金が一定額まで減免される制度です。令和7年度から始まり、熊大でも申請を受け付けています。", "check": "自分が対象か、まず家族に確認しよう" },
+    { "type": "steps", "heading": "申請の流れ", "steps": [
+      { "title": "対象か確認する", "desc": "扶養する子どもの人数を家族に確認" },
+      { "title": "JASSOに申し込む", "desc": "スカラネットで給付奨学金に申込" },
+      { "title": "大学に書類を出す", "desc": "授業料減免の申請書を提出" },
+      { "title": "結果を受け取る", "desc": "審査後に減免額が通知される" } ], "tips": "締切を過ぎると前期・後期で受けられない" },
+    { "type": "info", "heading": "申請の基本情報", "rows": [
+      { "label": "対象", "value": "学部新入生・編入学生" },
+      { "label": "窓口", "value": "学生支援部 学生生活課" },
+      { "label": "申込", "value": "大学HPの案内から" } ], "deadline": "詳しくは大学HPを確認" },
+    { "type": "ranking", "heading": "（表示確認用）", "items": [
+      { "name": "1位の名前", "comment": "ひとことコメント" },
+      { "name": "2位の名前", "comment": "ひとことコメント" },
+      { "name": "3位の名前", "comment": "ひとことコメント" },
+      { "name": "4位の名前", "comment": "" },
+      { "name": "5位の名前", "comment": "" } ], "note": "調査方法・出典" }
+  ],
+  "caption": "表示確認用のサンプルです",
+  "hashtags": ["熊本大学"]
+}
