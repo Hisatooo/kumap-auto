@@ -31,11 +31,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           NUMBER: ${{ github.event.issue.number }}
-        run: gh issue close "$NUMBER" --repo "$GITHUB_REPOSITORY" --comment "Instagram に投稿しました ✅"
+        run: |
+          gh issue close "$NUMBER" --repo "$GITHUB_REPOSITORY" --comment "Instagram に投稿しました ✅"
       - name: 失敗したら知らせる
         if: failure()
         env:
           GH_TOKEN: ${{ github.token }}
           NUMBER: ${{ github.event.issue.number }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        run: gh issue comment "$NUMBER" --repo "$GITHUB_REPOSITORY" --body "投稿に失敗しました。ログ: $RUN_URL （直したら approve ラベルを外して付け直すと再実行されます）"
+        run: |
+          gh issue comment "$NUMBER" --repo "$GITHUB_REPOSITORY" --body "投稿に失敗しました。ログ: $RUN_URL （直したら approve ラベルを外して付け直すと再実行されます）"
