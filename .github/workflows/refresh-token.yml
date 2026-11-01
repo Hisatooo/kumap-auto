@@ -1,0 +1,23 @@
+name: Instagram トークンを更新
+on:
+  schedule:
+    - cron: "0 0 1,15 * *" # 毎月1日と15日（トークンは60日で切れる）
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: 新しいトークンを Secret に保存
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          GH_TOKEN: ${{ secrets.GH_PAT }} # Secrets の書き込み権限つき fine-grained token
+        run: node src/refresh-token.js | gh secret set IG_ACCESS_TOKEN --repo "$GITHUB_REPOSITORY"

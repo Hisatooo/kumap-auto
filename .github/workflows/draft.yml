@@ -1,0 +1,44 @@
+name: 投稿案をつくる
+on:
+  schedule:
+    - cron: "0 22 * * *" # 毎日 7:00 JST
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency: kumap-draft
+
+jobs:
+  draft:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - id: draft
+        run: node src/draft.js
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          IMAGE_BASE_URL: https://raw.githubusercontent.com/${{ github.repository }}/main
+      - name: 画像をコミット
+        if: steps.draft.outputs.post_id != ''
+        run: |
+          git config user.name "kumap-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add posts state
+          git commit -m "chore: draft ${{ steps.draft.outputs.post_id }}"
+          git push
+      - name: 承認用の Issue をつくる
+        if: steps.draft.outputs.post_id != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          POST_ID: ${{ steps.draft.outputs.post_id }}
+          TITLE: ${{ steps.draft.outputs.title }}
+        run: gh issue create --title "投稿案: $TITLE" --body-file "posts/$POST_ID/issue.md" --label draft
