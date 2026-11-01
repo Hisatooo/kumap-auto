@@ -20,7 +20,7 @@ async function loadPost() {
     throw new Error(`${POST_FILE} の形式が正しくありません:\n${issues}`);
   }
   const candidates = JSON.parse(await readFile(CANDIDATES_FILE, "utf8"));
-  if (!candidates.some((c) => c.url === parsed.data.source_url)) {
+  if (parsed.data.source_name === "熊本大学公式HP" && !candidates.some((c) => c.url === parsed.data.source_url)) {
     throw new Error(`source_url が候補にありません（${CANDIDATES_FILE} からそのまま写す）: ${parsed.data.source_url}`);
   }
   return parsed.data;

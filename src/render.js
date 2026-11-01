@@ -174,7 +174,7 @@ ${ASSETS.leavesDarkR ? `<img class="abs" style="left:945px;top:405px" src="${ASS
 <div class="cta red">${svg('<circle cx="12" cy="7" r="4" fill="currentColor"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6z" fill="currentColor"/>')}フォロー</div></div>
 <div class="abs" style="left:72px;width:936px;top:880px;height:84px;background:var(--bg);color:var(--ink);display:flex;align-items:center;padding:0 28px;gap:24px">
 <span style="color:var(--red);font:700 26px Arial,sans-serif;padding-right:24px;border-right:2px solid var(--ink)">SOURCE</span>
-<span class="fit" style="font-weight:700;font-size:26px;white-space:nowrap">熊本大学公式HP「${esc(post.source_title)}」</span></div>
+<span class="fit" style="font-weight:700;font-size:26px;white-space:nowrap">${esc(post.source_name)}「${esc(post.source_title)}」</span></div>
 <div class="abs" style="left:0;right:0;top:1254px;border-top:2px solid #2f5a43"></div>
 <div class="abs" style="left:72px;bottom:32px;font:700 32px Arial,sans-serif">@kumap_info</div>
 <div class="abs" style="right:90px;bottom:38px;font:700 22px Arial,sans-serif">${page} / ${total}</div>`,

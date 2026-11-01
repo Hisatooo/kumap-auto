@@ -63,7 +63,7 @@ function postSection({ id, post, images }) {
 export function buildSiteHtml(posts, { iconDataUri = null } = {}) {
   const body = posts.length
     ? posts.map(postSection).join("\n")
-    : `<p class="empty">まだ投稿案はありません。熊大公式HPに新しいお知らせが出ると、ここに画像とキャプションが追加されます。</p>`;
+    : `<p class="empty">まだ投稿案はありません。「更新して」と頼むと、ここに画像とキャプションが追加されます。</p>`;
   return `<title>クマップ 投稿ストック</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap">
@@ -110,7 +110,7 @@ button:focus-visible { outline:2px solid var(--red); outline-offset:2px; }
 <div class="wrap">
 <header class="top">
   ${iconDataUri ? `<img src="${iconDataUri}" alt="クマップ">` : ""}
-  <div><h1>クマップ 投稿ストック</h1><p>熊大公式HPの学生向けお知らせから作った投稿案。画像を保存し、キャプションをコピーして Instagram に投稿。</p></div>
+  <div><h1>クマップ 投稿ストック</h1><p>熊大公式のお知らせや、熊本の熊大生向け情報（学割・制度・お店など）から作った投稿案。画像を保存し、キャプションをコピーして Instagram に投稿。</p></div>
 </header>
 ${body}
 </div>

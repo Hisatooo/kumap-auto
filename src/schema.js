@@ -53,6 +53,7 @@ export const PostSchema = z.object({
   skip_reason: z.string(),
   source_url: z.string().describe("選んだ記事のURL（候補の中からそのまま）"),
   source_title: z.string().describe("選んだ記事のタイトル（候補の中からそのまま）"),
+  source_name: z.string().default("熊本大学公式HP").describe("出典の名前（例: 熊本市公式HP、店舗公式サイト）"),
   category: z.enum(Object.keys(CATEGORIES)),
   cover: z.object({
     title: z.string().describe("表紙の大見出し。1行8文字以内×最大2行。改行は\\n"),
