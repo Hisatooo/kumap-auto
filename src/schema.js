@@ -1,6 +1,9 @@
 import { z } from "zod";
 
 // Cover category chip: key → Japanese label (rendered as "NEWS お知らせ").
+// Cover designs; build.js rotates through them so consecutive posts differ.
+export const COVER_STYLES = ["scene", "dark", "red", "frame"];
+
 export const CATEGORIES = {
   NEWS: "お知らせ",
   MONEY: "お金",
@@ -58,6 +61,7 @@ export const PostSchema = z.object({
   cover: z.object({
     title: z.string().describe("表紙の大見出し。1行8文字以内×最大2行。改行は\\n"),
     lead: z.string().describe("この投稿で何がわかるか。40文字以内"),
+    style: z.enum(COVER_STYLES).optional().describe("表紙のデザイン。省略すると投稿ごとに順番で切り替わる"),
   }),
   slides: z.array(z.discriminatedUnion("type", [PointSlide, StepsSlide, InfoSlide, RankingSlide])).min(1).max(4),
   caption: z.string().describe("Instagramキャプション本文。ハッシュタグは含めない"),

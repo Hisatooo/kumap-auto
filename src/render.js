@@ -37,6 +37,7 @@ body { width:${SLIDE_WIDTH}px; height:${SLIDE_HEIGHT}px; font-family:"Noto Sans 
 /* cover */
 .chip { display:inline-block; height:52px; line-height:48px; padding:0 22px; border:2px solid var(--ink); font-weight:900; font-size:24px; margin-right:12px; }
 .chip.red { background:var(--red); border-color:var(--red); color:#fff; }
+.gold { color:var(--gold); }
 .hl { background:linear-gradient(transparent 62%, var(--peach) 62%, var(--peach) 92%, transparent 92%); padding-right:.4em; }
 /* point */
 .num { color:var(--red); font-family:Arial,sans-serif; font-weight:900; font-size:190px; line-height:1; letter-spacing:-.04em; }
@@ -88,23 +89,64 @@ const header = (label) => `
 <div class="abs logo" style="left:154px;top:50px;font-size:34px">クマップ</div>
 <div class="abs label" style="right:72px;top:60px">${label}</div>`;
 
-function coverPage(post, { page, total, date }) {
+const coverTitle = (post, hlClass = "hl") => {
   const titleLines = lines(post.cover.title);
   const last = titleLines.length - 1;
-  const title = titleLines.map((l, i) => (i === last ? `<span class="hl">${l}</span>` : l)).join("<br>");
-  return doc(`
+  return titleLines.map((l, i) => (i === last ? `<span class="${hlClass}">${l}</span>` : l)).join("<br>");
+};
+const coverBrand = (date, color = "var(--ink)") => `
 <div class="abs icon" style="left:72px;top:52px;width:96px;height:96px;${iconStyle()}"></div>
-<div class="abs logo" style="left:190px;top:56px;font-size:52px">クマップ</div>
-<div class="abs label" style="left:190px;top:124px;font-size:17px">KUMAMOTO UNIV. CAMPUS MEDIA</div>
-<div class="abs label" style="right:96px;top:78px;font-size:32px">${esc(date)}</div>
-<div class="abs" style="left:72px;right:72px;top:170px;border-top:3px solid var(--ink)"></div>
-<div class="abs" style="left:72px;top:206px"><span class="chip red">${post.category} ${esc(CATEGORIES[post.category])}</span><span class="chip">#熊大</span><span class="chip">#クマップ</span></div>
-<div class="abs title fit" style="left:72px;width:936px;top:290px;height:260px;font-size:112px;line-height:1.08">${title}</div>
+<div class="abs logo" style="left:190px;top:56px;font-size:52px;color:${color}">クマップ</div>
+<div class="abs label" style="left:190px;top:124px;font-size:17px;color:${color}">KUMAMOTO UNIV. CAMPUS MEDIA</div>
+<div class="abs label" style="right:96px;top:78px;font-size:32px;color:${color}">${esc(date)}</div>
+<div class="abs" style="left:72px;right:72px;top:170px;border-top:3px solid ${color}"></div>`;
+const coverChips = (post, top = 206, plain = "", main = "") =>
+  `<div class="abs" style="left:72px;top:${top}px"><span class="chip red" style="${main}">${post.category} ${esc(CATEGORIES[post.category])}</span><span class="chip" style="${plain}">#熊大</span><span class="chip" style="${plain}">#クマップ</span></div>`;
+const coverFoot = (page, total, bg = "var(--green)", fg = "var(--bg)") => `
+<div class="abs" style="left:0;right:0;top:1168px;bottom:0;background:${bg}"></div>
+<div class="abs" style="left:72px;bottom:42px;color:${fg};font:700 32px Arial,sans-serif">@kumap_info</div>
+<div class="abs" style="right:90px;bottom:46px;color:${fg};font:700 22px Arial,sans-serif">${page} / ${total}</div>`;
+const img = (src, style) => (src ? `<img class="abs" style="${style}" src="${src}">` : "");
+
+const COVERS = {
+  // Light page with the campus illustration (the original template).
+  scene: (post, { page, total, date }) => doc(`${coverBrand(date)}${coverChips(post)}
+<div class="abs title fit" style="left:72px;width:936px;top:290px;height:260px;font-size:112px;line-height:1.08">${coverTitle(post)}</div>
 <div class="abs fit" style="left:72px;width:936px;top:572px;height:100px;font-size:32px;line-height:1.5;color:var(--green)">${esc(post.cover.lead)}</div>
-${ASSETS.coverScene ? `<img class="abs" style="left:0;top:700px;width:1080px" src="${ASSETS.coverScene}">` : ""}
-<div class="abs" style="left:0;right:0;top:1168px;bottom:0;background:var(--green)"></div>
-<div class="abs" style="left:72px;bottom:42px;color:var(--bg);font:700 32px Arial,sans-serif">@kumap_info</div>
-<div class="abs" style="right:90px;bottom:46px;color:var(--bg);font:700 22px Arial,sans-serif">${page} / ${total}</div>`);
+${img(ASSETS.coverScene, "left:0;top:700px;width:1080px")}${coverFoot(page, total)}`),
+
+  // Dark green page, cream title with a gold last line, big category word behind.
+  dark: (post, { page, total, date }) => doc(`
+<div class="abs" style="right:-30px;top:890px;font:900 260px Arial,sans-serif;color:#24483a;letter-spacing:-.04em;line-height:1">${post.category}</div>
+${img(ASSETS.leavesDarkTl, "left:10px;top:980px;transform:rotate(-90deg)")}
+${img(ASSETS.leavesDarkR, "left:945px;top:200px")}
+${coverBrand(date, "var(--bg)")}${coverChips(post, 206, "border-color:var(--bg);color:var(--bg)")}
+<div class="abs fit" style="left:72px;width:880px;top:300px;height:340px;font-size:120px;font-weight:900;line-height:1.12;color:var(--bg)">${coverTitle(post, "gold")}</div>
+<div class="abs" style="left:72px;top:690px;width:90px;border-top:6px solid var(--red)"></div>
+<div class="abs fit" style="left:72px;width:880px;top:730px;height:150px;font-size:38px;font-weight:700;line-height:1.55;color:var(--sand)">${esc(post.cover.lead)}</div>
+${coverFoot(page, total, "var(--bg)", "var(--green)")}`, { dark: true }),
+
+  // Red top band with a white title, lead and skyline on the cream half.
+  red: (post, { page, total, date }) => doc(`
+<div class="abs" style="left:0;right:0;top:0;height:780px;background:var(--red)"></div>
+${coverBrand(date, "#fff")}${coverChips(post, 206, "border-color:#fff;color:#fff", "background:#fff;border-color:#fff;color:var(--red)")}
+<div class="abs fit" style="left:72px;width:936px;top:310px;height:420px;font-size:124px;font-weight:900;line-height:1.1;color:#fff">${coverTitle(post, "")}</div>
+<div class="abs" style="left:72px;top:740px;background:var(--bg);color:var(--red);font:900 28px Arial,sans-serif;padding:14px 26px">CHECK IT</div>
+<div class="abs title fit" style="left:72px;width:936px;top:850px;height:150px;font-size:44px;line-height:1.5">${esc(post.cover.lead)}</div>
+${img(ASSETS.skyline, "left:0;top:1010px;width:1080px")}${coverFoot(page, total)}`),
+
+  // Cream page, title framed in a thick box with a tab, leaves in the corners.
+  frame: (post, { page, total, date }) => doc(`${coverBrand(date)}${coverChips(post)}
+<div class="abs" style="left:72px;top:330px;width:936px;height:560px;border:6px solid var(--green);background:var(--sand)"></div>
+<div class="abs" style="left:96px;top:306px;background:var(--green);color:var(--bg);font:900 26px Arial,sans-serif;padding:10px 24px">PICK UP</div>
+${img(ASSETS.leaf, "left:900px;top:270px;width:130px;transform:rotate(18deg)")}
+<div class="abs title fit" style="left:120px;width:840px;top:400px;height:420px;font-size:116px;line-height:1.12;display:flex;align-items:center">${"<div>" + coverTitle(post) + "</div>"}</div>
+<div class="abs fit" style="left:72px;width:936px;top:930px;height:180px;font-size:40px;font-weight:700;line-height:1.55;color:var(--green)">${esc(post.cover.lead)}</div>
+${coverFoot(page, total)}`),
+};
+
+function coverPage(post, opts) {
+  return (COVERS[post.cover.style] ?? COVERS.scene)(post, opts);
 }
 
 function pointPage(s, { page, total, index }) {
