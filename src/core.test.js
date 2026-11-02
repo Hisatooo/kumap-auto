@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { PostSchema } from "./schema.js";
 import { buildCaption, buildSiteHtml } from "./site.js";
-import { buildSlidesHtml } from "./render.js";
+import { availableCoverStyles, buildSlidesHtml } from "./render.js";
 import { htmlToText, parseFeed } from "./sources.js";
 
 const samplePost = PostSchema.parse({
@@ -52,18 +52,28 @@ test("hashtags always get a single #", () => {
 });
 
 test("pages: cover + one per slide + closing page, with escaped text and page numbers", () => {
-  const pages = buildSlidesHtml(samplePost, { date: "2026.11.01" });
+  const pages = buildSlidesHtml(samplePost, { date: "2026.11.01", vol: 7 });
   assert.equal(pages.length, 4);
-  assert.match(pages[0], /授業料免除<br><span class="hl">申請はお早めに<\/span>/);
+  assert.match(pages[0], /授業料免除<br>申請はお早めに/);
+  assert.match(pages[0], /VOL\.07/);
   assert.match(pages[0], /MONEY お金/);
   assert.match(pages[1], /学部生 &lt;全員&gt;/);
   assert.match(pages[2], /INFORMATION/);
   assert.doesNotMatch(pages[2], /DEADLINE/); // deadline: null hides the bar
   assert.match(pages[3], /熊本大学公式HP「授業料免除について」/);
-  pages.forEach((p, i) => assert.match(p, new RegExp(`${i + 1} / 4`)));
+  pages.slice(1).forEach((p, i) => assert.match(p, new RegExp(`${i + 2} / 4`))); // cover v01 shows SWIPE instead
 });
 
 test("sample post fixture still matches the schema", async () => {
   const { readFile } = await import("node:fs/promises");
   PostSchema.parse(JSON.parse(await readFile(new URL("../test/sample-post.json", import.meta.url), "utf8")));
+});
+
+test("cover styles: list cover needs 3+ items, event cover needs event data, Q&A only when chosen", () => {
+  assert.deepEqual(availableCoverStyles(samplePost), ["v01", "v02", "v03", "v04", "v05", "v09"]);
+  const event = { tag: "参加者募集中", month: "NOV", day: "21", weekday: "SAT", rows: [{ label: "場所", value: "黒髪" }] };
+  const withEvent = PostSchema.parse({ ...samplePost, cover: { ...samplePost.cover, event, style: "v06" } });
+  assert.ok(availableCoverStyles(withEvent).includes("v08"));
+  assert.ok(availableCoverStyles(withEvent).includes("v06"));
+  assert.match(buildSlidesHtml({ ...withEvent, cover: { ...withEvent.cover, style: "v08" } }, { date: "2026.11.01" })[0], /黒髪/);
 });

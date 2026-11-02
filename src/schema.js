@@ -2,7 +2,7 @@ import { z } from "zod";
 
 // Cover category chip: key → Japanese label (rendered as "NEWS お知らせ").
 // Cover designs; build.js rotates through them so consecutive posts differ.
-export const COVER_STYLES = ["scene", "dark", "red", "frame"];
+export const COVER_STYLES = ["v01", "v02", "v03", "v04", "v05", "v06", "v07", "v08", "v09"];
 
 export const CATEGORIES = {
   NEWS: "お知らせ",
@@ -61,7 +61,17 @@ export const PostSchema = z.object({
   cover: z.object({
     title: z.string().describe("表紙の大見出し。1行8文字以内×最大2行。改行は\\n"),
     lead: z.string().describe("この投稿で何がわかるか。40文字以内"),
-    style: z.enum(COVER_STYLES).optional().describe("表紙のデザイン。省略すると投稿ごとに順番で切り替わる"),
+    style: z.enum(COVER_STYLES).optional().describe("表紙。省略すると投稿ごとに順番で切り替わる。v06(Q&A)は title が質問のときだけ指定"),
+    event: z
+      .object({
+        tag: z.string().default("イベント情報").describe("右上のラベル。例: 参加者募集中"),
+        month: z.string().describe("英語3文字。例: NOV"),
+        day: z.string().describe("日付の数字。例: 10"),
+        weekday: z.string().describe("英語3文字。例: SAT"),
+        rows: z.array(z.object({ label: z.string(), value: z.string() })).min(1).max(3).describe("時間・場所・参加費など"),
+      })
+      .optional()
+      .describe("イベント告知の表紙(v08)用。記事に日付が書かれたイベントのときだけ"),
   }),
   slides: z.array(z.discriminatedUnion("type", [PointSlide, StepsSlide, InfoSlide, RankingSlide])).min(1).max(4),
   caption: z.string().describe("Instagramキャプション本文。ハッシュタグは含めない"),

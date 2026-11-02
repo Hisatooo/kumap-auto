@@ -1,8 +1,8 @@
 // Step 2: work/post.json (written by Claude) → slides + caption in posts/<id>/ → Artifact page site/index.html.
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import { POSTS_DIR, SEEN_FILE } from "./config.js";
-import { renderSlides } from "./render.js";
-import { COVER_STYLES, PostSchema } from "./schema.js";
+import { availableCoverStyles, renderSlides } from "./render.js";
+import { PostSchema } from "./schema.js";
 import { buildCaption, writeSite } from "./site.js";
 
 const POST_FILE = "work/post.json";
@@ -29,14 +29,15 @@ async function loadPost() {
 async function main() {
   const loaded = await loadPost();
   const postCount = (await readdir(POSTS_DIR).catch(() => [])).length;
-  const style = loaded.cover.style ?? COVER_STYLES[postCount % COVER_STYLES.length];
+  const styles = availableCoverStyles(loaded);
+  const style = loaded.cover.style ?? styles[postCount % styles.length];
   const post = { ...loaded, cover: { ...loaded.cover, style } };
   const postId = jstStamp();
   const dir = `${POSTS_DIR}/${postId}`;
   await mkdir(dir, { recursive: true });
 
   const date = `${postId.slice(0, 4)}.${postId.slice(4, 6)}.${postId.slice(6, 8)}`;
-  const images = await renderSlides(post, dir, { date });
+  const images = await renderSlides(post, dir, { date, vol: postCount + 1 });
   await writeFile(`${dir}/post.json`, JSON.stringify(post, null, 2) + "\n");
   await writeFile(`${dir}/caption.txt`, buildCaption(post) + "\n");
 
