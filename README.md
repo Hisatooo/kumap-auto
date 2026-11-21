@@ -14,5 +14,6 @@
 - `ranking`（RANKING：記事に順位がある時だけ）
 
 表紙イラスト・葉・街並みはテンプレート画像から切り出したもの（`assets/`）。
+表紙には毎回、熊大・熊本の写真（`assets/photos/`：五高記念館・図書館・熊本城・市電）をモノクロに加工して全面に透かす。号数（VOL）ごとに順番に切り替わる（`src/render.js` の `COVER_PHOTOS`）。写真を足すときは `assets/photos/<名前>.jpg` を置いて `COVER_PHOTOS` に名前を追加。五高記念館・図書館の写真は大学・撮影者の権利確認が必要、熊本城・市電は AI 生成の水彩画。
 **`assets/icon.png`（正方形のアカウントアイコン）を置くと、丸枠にアイコンが入る。** 置かなければ空の丸のまま。
 見た目の確認: `node -e` で `test/sample-post.json` を描画（`src/render.js` の `renderSlides`）。

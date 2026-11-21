@@ -7,7 +7,8 @@ import { CATEGORIES } from "./schema.js";
 const ASSET_DIR = new URL("../assets/", import.meta.url);
 const asset = (name) => {
   const file = new URL(name, ASSET_DIR);
-  return existsSync(file) ? `data:image/png;base64,${readFileSync(file).toString("base64")}` : null;
+  const mime = name.endsWith(".jpg") ? "image/jpeg" : "image/png";
+  return existsSync(file) ? `data:${mime};base64,${readFileSync(file).toString("base64")}` : null;
 };
 const ASSETS = {
   coverScene: asset("cover-scene.png"),
@@ -217,10 +218,27 @@ export function availableCoverStyles(post) {
   });
 }
 
+// Kumadai / Kumamoto photos watermarked over every cover; one per issue, in turn (assets/photos/*.jpg).
+export const COVER_PHOTOS = ["goko", "library", "castle", "tram"];
+const PHOTO_IMG = Object.fromEntries(COVER_PHOTOS.map((k) => [k, asset(`photos/${k}.jpg`)]));
+
+/** @param {number} vol issue number (1-based) @returns {string} photo key for this issue */
+export const coverPhotoFor = (vol) => COVER_PHOTOS[(Math.max(vol, 1) - 1) % COVER_PHOTOS.length];
+
+// Monochrome photo laid over the whole cover: multiply tints the light paper, screen lifts the dark green.
+function photoWatermark(key) {
+  const src = PHOTO_IMG[key];
+  if (!src) return "";
+  const img = (blend, opacity) =>
+    `<img class="abs" style="left:0;top:0;width:1080px;height:1350px;object-fit:cover;filter:grayscale(1) contrast(1.25) brightness(1.05);mix-blend-mode:${blend};opacity:${opacity}" src="${src}">`;
+  return img("multiply", 0.2) + img("screen", 0.14);
+}
+
 function coverPage(post, opts) {
   const style = COVERS[post.cover.style] ? post.cover.style : "v01";
   const bg = COVER_IMG[style] ? `<img class="abs" style="left:0;top:0;width:1080px;height:1350px" src="${COVER_IMG[style]}">` : "";
-  return doc(bg + COVERS[style](post, { vol: 1, ...opts }));
+  const o = { vol: 1, ...opts };
+  return doc(bg + COVERS[style](post, o) + photoWatermark(coverPhotoFor(o.vol)));
 }
 
 function pointPage(s, { page, total, index }) {

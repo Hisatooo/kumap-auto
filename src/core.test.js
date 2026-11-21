@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { PostSchema } from "./schema.js";
 import { buildCaption, buildSiteHtml } from "./site.js";
-import { availableCoverStyles, buildSlidesHtml } from "./render.js";
+import { COVER_PHOTOS, availableCoverStyles, buildSlidesHtml, coverPhotoFor } from "./render.js";
 import { htmlToText, parseFeed } from "./sources.js";
 
 const samplePost = PostSchema.parse({
@@ -76,4 +76,11 @@ test("cover styles: list cover needs 3+ items, event cover needs event data, Q&A
   assert.ok(availableCoverStyles(withEvent).includes("v08"));
   assert.ok(availableCoverStyles(withEvent).includes("v06"));
   assert.match(buildSlidesHtml({ ...withEvent, cover: { ...withEvent.cover, style: "v08" } }, { date: "2026.11.01" })[0], /黒髪/);
+});
+
+test("cover photo rotates through the Kumadai photos by issue number", () => {
+  assert.equal(coverPhotoFor(1), COVER_PHOTOS[0]);
+  assert.equal(coverPhotoFor(COVER_PHOTOS.length), COVER_PHOTOS.at(-1));
+  assert.equal(coverPhotoFor(COVER_PHOTOS.length + 1), COVER_PHOTOS[0]);
+  assert.notEqual(coverPhotoFor(5), coverPhotoFor(6));
 });
