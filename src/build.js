@@ -1,7 +1,8 @@
 // Step 2: work/post.json (written by Claude) → slides + caption in posts/<id>/ → Artifact page site/index.html.
+import { existsSync } from "node:fs";
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import { POSTS_DIR, SEEN_FILE } from "./config.js";
-import { availableCoverStyles, renderSlides } from "./render.js";
+import { availableCoverStyles, photoReuseError, renderSlides } from "./render.js";
 import { PostSchema } from "./schema.js";
 import { buildCaption, writeSite } from "./site.js";
 
@@ -26,9 +27,25 @@ async function loadPost() {
   return parsed.data;
 }
 
+const POST_ID = /^\d{8}-\d{4}$/;
+
+async function assertNewPhoto(photo, postIds) {
+  if (!existsSync(`assets/photos/${photo}.jpg`)) {
+    throw new Error(`assets/photos/${photo}.jpg がありません。今回の投稿用の写真を置いてください`);
+  }
+  const earlier = await Promise.all(
+    postIds.map(async (id) => JSON.parse(await readFile(`${POSTS_DIR}/${id}/post.json`, "utf8")).cover.photo),
+  );
+  const error = photoReuseError(photo, earlier.filter(Boolean));
+  if (error) throw new Error(error);
+}
+
 async function main() {
   const loaded = await loadPost();
-  const postCount = (await readdir(POSTS_DIR).catch(() => [])).length;
+  // ponytail: count post folders only — posts/.DS_Store used to inflate the VOL number.
+  const postIds = (await readdir(POSTS_DIR).catch(() => [])).filter((d) => POST_ID.test(d));
+  await assertNewPhoto(loaded.cover.photo, postIds);
+  const postCount = postIds.length;
   const styles = availableCoverStyles(loaded);
   const style = loaded.cover.style ?? styles[postCount % styles.length];
   const post = { ...loaded, cover: { ...loaded.cover, style } };

@@ -2,7 +2,12 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { PostSchema } from "./schema.js";
 import { buildCaption, buildSiteHtml } from "./site.js";
-import { COVER_PHOTOS, availableCoverStyles, buildSlidesHtml, coverPhotoFor } from "./render.js";
+import { LEGACY_PHOTOS, availableCoverStyles, buildSlidesHtml, photoReuseError } from "./render.js";
+import { makeZip } from "./zip.js";
+import { execFileSync } from "node:child_process";
+import { mkdtempSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { htmlToText, parseFeed } from "./sources.js";
 
 const samplePost = PostSchema.parse({
@@ -11,7 +16,7 @@ const samplePost = PostSchema.parse({
   source_url: "https://www.kumamoto-u.ac.jp/example",
   source_title: "授業料免除について",
   category: "MONEY",
-  cover: { title: "授業料免除\\n申請はお早めに", lead: "後期の締切に注意" },
+  cover: { title: "授業料免除\\n申請はお早めに", lead: "後期の締切に注意", photo: "test-photo" },
   slides: [
     { type: "point", subtitle: "TARGET", heading: "対象", body: "学部生 <全員>", check: "確認しよう" },
     { type: "info", heading: "基本情報", rows: [{ label: "対象", value: "学部生" }, { label: "申込", value: "HPから" }], deadline: null },
@@ -78,9 +83,19 @@ test("cover styles: list cover needs 3+ items, event cover needs event data, Q&A
   assert.match(buildSlidesHtml({ ...withEvent, cover: { ...withEvent.cover, style: "v08" } }, { date: "2026.11.01" })[0], /黒髪/);
 });
 
-test("cover photo rotates through the Kumadai photos by issue number", () => {
-  assert.equal(coverPhotoFor(1), COVER_PHOTOS[0]);
-  assert.equal(coverPhotoFor(COVER_PHOTOS.length), COVER_PHOTOS.at(-1));
-  assert.equal(coverPhotoFor(COVER_PHOTOS.length + 1), COVER_PHOTOS[0]);
-  assert.notEqual(coverPhotoFor(5), coverPhotoFor(6));
+test("photoReuseError refuses a photo an earlier post or the legacy rotation used", () => {
+  assert.equal(photoReuseError("lib-study", ["tram-night"]), null);
+  assert.match(photoReuseError("tram-night", ["tram-night"]), /前の投稿で使いました/);
+  assert.match(photoReuseError(LEGACY_PHOTOS[0], []), /前の投稿で使いました/);
+});
+
+test("makeZip writes a zip that unzip accepts, with every file intact", async () => {
+  const files = [
+    { name: "kumap-1.jpg", data: new Uint8Array([1, 2, 3, 255]) },
+    { name: "kumap-2.jpg", data: new TextEncoder().encode("second slide") },
+  ];
+  const path = join(mkdtempSync(join(tmpdir(), "kumap-zip-")), "t.zip");
+  writeFileSync(path, Buffer.from(await makeZip(files).arrayBuffer()));
+  assert.match(execFileSync("unzip", ["-t", path], { encoding: "utf8" }), /No errors detected/);
+  assert.equal(execFileSync("unzip", ["-p", path, "kumap-2.jpg"], { encoding: "utf8" }), "second slide");
 });

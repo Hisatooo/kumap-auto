@@ -4,7 +4,7 @@
   "source_url": "https://www.kumamoto-u.ac.jp/daigakuseikatsu/nyugaku_zyugyou/nyugakuryo_menjo/io2v42",
   "source_title": "【重要】令和７年度からの多子世帯に対する大学等の無償化について",
   "category": "MONEY",
-  "cover": { "title": "授業料が\nタダになるかも", "lead": "多子世帯の無償化、対象と申請の流れを3分でまとめました" },
+  "cover": { "title": "授業料が\nタダになるかも", "lead": "多子世帯の無償化、対象と申請の流れを3分でまとめました", "photo": "castle" },
   "slides": [
     { "type": "point", "subtitle": "ABOUT", "heading": "どんな制度？", "body": "扶養している子どもが3人以上いる世帯の学生は、所得の制限なく授業料と入学金が一定額まで減免される制度です。令和7年度から始まり、熊大でも申請を受け付けています。", "check": "自分が対象か、まず家族に確認しよう" },
     { "type": "steps", "heading": "申請の流れ", "steps": [

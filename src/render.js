@@ -218,16 +218,24 @@ export function availableCoverStyles(post) {
   });
 }
 
-// Kumadai / Kumamoto photos watermarked over every cover; one per issue, in turn (assets/photos/*.jpg).
-export const COVER_PHOTOS = ["goko", "library", "castle", "tram"];
-const PHOTO_IMG = Object.fromEntries(COVER_PHOTOS.map((k) => [k, asset(`photos/${k}.jpg`)]));
+// Every post gets its own photo (post.cover.photo → assets/photos/<photo>.jpg); build.js refuses repeats.
+// These four were used on covers before posts recorded cover.photo, so they count as used.
+export const LEGACY_PHOTOS = ["goko", "library", "castle", "tram"];
 
-/** @param {number} vol issue number (1-based) @returns {string} photo key for this issue */
-export const coverPhotoFor = (vol) => COVER_PHOTOS[(Math.max(vol, 1) - 1) % COVER_PHOTOS.length];
+/**
+ * @param {string} photo cover.photo of the new post
+ * @param {string[]} usedPhotos cover.photo of every earlier post
+ * @returns {string | null} error message, or null when the photo is new
+ */
+export function photoReuseError(photo, usedPhotos) {
+  return [...LEGACY_PHOTOS, ...usedPhotos].includes(photo)
+    ? `cover.photo "${photo}" は前の投稿で使いました。今回用の新しい写真を assets/photos/ に置いて指定してください`
+    : null;
+}
 
 // Monochrome photo laid over the whole cover: multiply tints the light paper, screen lifts the dark green.
 function photoWatermark(key) {
-  const src = PHOTO_IMG[key];
+  const src = key ? asset(`photos/${key}.jpg`) : null;
   if (!src) return "";
   const img = (blend, opacity) =>
     `<img class="abs" style="left:0;top:0;width:1080px;height:1350px;object-fit:cover;filter:grayscale(1) contrast(1.25) brightness(1.05);mix-blend-mode:${blend};opacity:${opacity}" src="${src}">`;
@@ -238,7 +246,7 @@ function coverPage(post, opts) {
   const style = COVERS[post.cover.style] ? post.cover.style : "v01";
   const bg = COVER_IMG[style] ? `<img class="abs" style="left:0;top:0;width:1080px;height:1350px" src="${COVER_IMG[style]}">` : "";
   const o = { vol: 1, ...opts };
-  return doc(bg + COVERS[style](post, o) + photoWatermark(coverPhotoFor(o.vol)));
+  return doc(bg + COVERS[style](post, o) + photoWatermark(post.cover.photo));
 }
 
 function pointPage(s, { page, total, index }) {

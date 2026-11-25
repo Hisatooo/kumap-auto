@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { POSTS_DIR } from "./config.js";
 import { CATEGORIES } from "./schema.js";
+import { makeZip } from "./zip.js";
 
 export const SITE_FILE = "site/index.html";
 const MAX_POSTS_ON_PAGE = 30;
@@ -52,6 +53,7 @@ function postSection({ id, post, images }) {
   <a class="source" href="${esc(post.source_url)}" target="_blank" rel="noopener">出典：${esc(post.source_title)} ↗</a>
 </header>
 <div class="slides" tabindex="0" aria-label="投稿画像（横にスクロール）">${slides}</div>
+<div class="save-bar"><button type="button" class="save-all" data-name="kumap-${id}.zip" hidden>${images.length}枚まとめて保存（zip）</button></div>
 <div class="caption">
   <div class="caption-bar"><span>キャプション</span><button type="button" class="copy">コピー</button></div>
   <pre>${esc(buildCaption(post))}</pre>
@@ -100,6 +102,7 @@ body { background:var(--bg); color:var(--ink); font-family:var(--font); font-siz
 button { font:inherit; font-size:13px; font-weight:700; color:var(--green); background:transparent; border:1.5px solid var(--green); border-radius:4px; padding:3px 12px; cursor:pointer; }
 button:hover { background:var(--green); color:var(--surface); }
 button:focus-visible { outline:2px solid var(--red); outline-offset:2px; }
+.save-bar { display:flex; justify-content:flex-end; margin-top:-6px; }
 .caption { border-top:1px solid var(--line); padding-top:12px; display:flex; flex-direction:column; gap:8px; }
 .caption-bar { display:flex; justify-content:space-between; align-items:center; font-size:13px; font-weight:700; letter-spacing:.06em; color:var(--muted); }
 .caption pre { margin:0; white-space:pre-wrap; word-break:break-word; font-family:var(--font); font-size:14px; background:var(--code); padding:14px; border-radius:4px; }
@@ -141,12 +144,38 @@ ${body}
           await downloads.save({ filename: btn.dataset.name, data: blob });
           notify("保存しました");
         } catch (err) {
-          if (err && err.code === "declined") return;
-          notify(err && err.code === "rate_limited" ? "前の保存が終わってからもう一度押してください" : "保存できませんでした。画像を長押しして保存してください");
+          notifySaveError(err);
+        }
+      });
+    });
+    document.querySelectorAll(".save-all").forEach((btn) => {
+      btn.hidden = false;
+      btn.addEventListener("click", async () => {
+        btn.disabled = true;
+        try {
+          const sources = [...btn.closest(".post").querySelectorAll(".save")];
+          const files = await Promise.all(sources.map(async (s) => {
+            const res = await fetch(s.dataset.src);
+            if (!res.ok) throw new Error("fetch " + s.dataset.src + " " + res.status);
+            return { name: s.dataset.name, data: new Uint8Array(await res.arrayBuffer()) };
+          }));
+          await downloads.save({ filename: btn.dataset.name, data: makeZip(files) });
+          notify(files.length + "枚を保存しました");
+        } catch (err) {
+          notifySaveError(err);
+        } finally {
+          btn.disabled = false;
         }
       });
     });
   });
+
+  function notifySaveError(err) {
+    if (err && err.code === "declined") return;
+    notify(err && err.code === "rate_limited" ? "前の保存が終わってからもう一度押してください" : "保存できませんでした。画像を長押しして保存してください");
+  }
+
+  ${makeZip.toString()}
 })();
 </script>`;
 }

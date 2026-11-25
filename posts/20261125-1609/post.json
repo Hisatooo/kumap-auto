@@ -8,7 +8,8 @@
   "cover": {
     "title": "テスト前の\n図書館ガイド",
     "lead": "市内3館の開館時間・休館日と、12月の休館期間をまとめました",
-    "style": "v09"
+    "style": "v09",
+    "photo": "library-reading-room"
   },
   "slides": [
     {

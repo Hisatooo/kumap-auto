@@ -61,6 +61,10 @@ export const PostSchema = z.object({
   cover: z.object({
     title: z.string().describe("表紙の大見出し。1行8文字以内×最大2行。改行は\\n"),
     lead: z.string().describe("この投稿で何がわかるか。40文字以内"),
+    photo: z
+      .string()
+      .regex(/^[a-z0-9-]+$/, "英小文字・数字・ハイフンだけ")
+      .describe("表紙に透かす写真 assets/photos/<photo>.jpg。毎回新しく用意し、過去の投稿と同じ写真は使えない"),
     style: z.enum(COVER_STYLES).optional().describe("表紙。省略すると投稿ごとに順番で切り替わる。v06(Q&A)は title が質問のときだけ指定"),
     event: z
       .object({

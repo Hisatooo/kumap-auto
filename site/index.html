@@ -34,6 +34,7 @@ body { background:var(--bg); color:var(--ink); font-family:var(--font); font-siz
 button { font:inherit; font-size:13px; font-weight:700; color:var(--green); background:transparent; border:1.5px solid var(--green); border-radius:4px; padding:3px 12px; cursor:pointer; }
 button:hover { background:var(--green); color:var(--surface); }
 button:focus-visible { outline:2px solid var(--red); outline-offset:2px; }
+.save-bar { display:flex; justify-content:flex-end; margin-top:-6px; }
 .caption { border-top:1px solid var(--line); padding-top:12px; display:flex; flex-direction:column; gap:8px; }
 .caption-bar { display:flex; justify-content:space-between; align-items:center; font-size:13px; font-weight:700; letter-spacing:.06em; color:var(--muted); }
 .caption pre { margin:0; white-space:pre-wrap; word-break:break-word; font-family:var(--font); font-size:14px; background:var(--code); padding:14px; border-radius:4px; }
@@ -60,6 +61,7 @@ button:focus-visible { outline:2px solid var(--red); outline-offset:2px; }
 <figcaption><span>4 / 6</span><button type="button" class="save" data-src="posts/20261125-1609/4.jpg" data-name="kumap-20261125-1609-4.jpg" hidden>保存</button></figcaption></figure><figure class="slide"><img src="posts/20261125-1609/5.jpg" alt="テスト前の 図書館ガイド 5枚目" loading="lazy" width="1080" height="1350">
 <figcaption><span>5 / 6</span><button type="button" class="save" data-src="posts/20261125-1609/5.jpg" data-name="kumap-20261125-1609-5.jpg" hidden>保存</button></figcaption></figure><figure class="slide"><img src="posts/20261125-1609/6.jpg" alt="テスト前の 図書館ガイド 6枚目" loading="lazy" width="1080" height="1350">
 <figcaption><span>6 / 6</span><button type="button" class="save" data-src="posts/20261125-1609/6.jpg" data-name="kumap-20261125-1609-6.jpg" hidden>保存</button></figcaption></figure></div>
+<div class="save-bar"><button type="button" class="save-all" data-name="kumap-20261125-1609.zip" hidden>6枚まとめて保存（zip）</button></div>
 <div class="caption">
   <div class="caption-bar"><span>キャプション</span><button type="button" class="copy">コピー</button></div>
   <pre>期末テストに向けて、勉強する場所を探している熊大生の方へ。熊本市内の図書館3館の開館時間と休館日をまとめました。
@@ -93,6 +95,7 @@ button:focus-visible { outline:2px solid var(--red); outline-offset:2px; }
 <figcaption><span>3 / 5</span><button type="button" class="save" data-src="posts/20261121-1504/3.jpg" data-name="kumap-20261121-1504-3.jpg" hidden>保存</button></figcaption></figure><figure class="slide"><img src="posts/20261121-1504/4.jpg" alt="帰省の運賃 学割で2割引 4枚目" loading="lazy" width="1080" height="1350">
 <figcaption><span>4 / 5</span><button type="button" class="save" data-src="posts/20261121-1504/4.jpg" data-name="kumap-20261121-1504-4.jpg" hidden>保存</button></figcaption></figure><figure class="slide"><img src="posts/20261121-1504/5.jpg" alt="帰省の運賃 学割で2割引 5枚目" loading="lazy" width="1080" height="1350">
 <figcaption><span>5 / 5</span><button type="button" class="save" data-src="posts/20261121-1504/5.jpg" data-name="kumap-20261121-1504-5.jpg" hidden>保存</button></figcaption></figure></div>
+<div class="save-bar"><button type="button" class="save-all" data-name="kumap-20261121-1504.zip" hidden>5枚まとめて保存（zip）</button></div>
 <div class="caption">
   <div class="caption-bar"><span>キャプション</span><button type="button" class="copy">コピー</button></div>
   <pre>冬休みに帰省する熊大生の方へ。JRの学割を使っていますか？
@@ -124,6 +127,7 @@ button:focus-visible { outline:2px solid var(--red); outline-offset:2px; }
 <figcaption><span>3 / 5</span><button type="button" class="save" data-src="posts/20261116-2201/3.jpg" data-name="kumap-20261116-2201-3.jpg" hidden>保存</button></figcaption></figure><figure class="slide"><img src="posts/20261116-2201/4.jpg" alt="熊本市内の 冬の灯り2選 4枚目" loading="lazy" width="1080" height="1350">
 <figcaption><span>4 / 5</span><button type="button" class="save" data-src="posts/20261116-2201/4.jpg" data-name="kumap-20261116-2201-4.jpg" hidden>保存</button></figcaption></figure><figure class="slide"><img src="posts/20261116-2201/5.jpg" alt="熊本市内の 冬の灯り2選 5枚目" loading="lazy" width="1080" height="1350">
 <figcaption><span>5 / 5</span><button type="button" class="save" data-src="posts/20261116-2201/5.jpg" data-name="kumap-20261116-2201-5.jpg" hidden>保存</button></figcaption></figure></div>
+<div class="save-bar"><button type="button" class="save-all" data-name="kumap-20261116-2201.zip" hidden>5枚まとめて保存（zip）</button></div>
 <div class="caption">
   <div class="caption-bar"><span>キャプション</span><button type="button" class="copy">コピー</button></div>
   <pre>授業終わりに寄れる、熊本市内の冬の灯りをまとめました。
@@ -154,6 +158,7 @@ button:focus-visible { outline:2px solid var(--red); outline-offset:2px; }
 <figcaption><span>4 / 6</span><button type="button" class="save" data-src="posts/20261102-0332/4.jpg" data-name="kumap-20261102-0332-4.jpg" hidden>保存</button></figcaption></figure><figure class="slide"><img src="posts/20261102-0332/5.jpg" alt="20歳になったら 学生納付特例 5枚目" loading="lazy" width="1080" height="1350">
 <figcaption><span>5 / 6</span><button type="button" class="save" data-src="posts/20261102-0332/5.jpg" data-name="kumap-20261102-0332-5.jpg" hidden>保存</button></figcaption></figure><figure class="slide"><img src="posts/20261102-0332/6.jpg" alt="20歳になったら 学生納付特例 6枚目" loading="lazy" width="1080" height="1350">
 <figcaption><span>6 / 6</span><button type="button" class="save" data-src="posts/20261102-0332/6.jpg" data-name="kumap-20261102-0332-6.jpg" hidden>保存</button></figcaption></figure></div>
+<div class="save-bar"><button type="button" class="save-all" data-name="kumap-20261102-0332.zip" hidden>6枚まとめて保存（zip）</button></div>
 <div class="caption">
   <div class="caption-bar"><span>キャプション</span><button type="button" class="copy">コピー</button></div>
   <pre>20歳になった熊大生の方へ。国民年金の「学生納付特例」は申請しましたか？
@@ -186,6 +191,7 @@ button:focus-visible { outline:2px solid var(--red); outline-offset:2px; }
 <figcaption><span>3 / 5</span><button type="button" class="save" data-src="posts/20261101-2330/3.jpg" data-name="kumap-20261101-2330-3.jpg" hidden>保存</button></figcaption></figure><figure class="slide"><img src="posts/20261101-2330/4.jpg" alt="入学料・授業料 無償化の手続き 4枚目" loading="lazy" width="1080" height="1350">
 <figcaption><span>4 / 5</span><button type="button" class="save" data-src="posts/20261101-2330/4.jpg" data-name="kumap-20261101-2330-4.jpg" hidden>保存</button></figcaption></figure><figure class="slide"><img src="posts/20261101-2330/5.jpg" alt="入学料・授業料 無償化の手続き 5枚目" loading="lazy" width="1080" height="1350">
 <figcaption><span>5 / 5</span><button type="button" class="save" data-src="posts/20261101-2330/5.jpg" data-name="kumap-20261101-2330-5.jpg" hidden>保存</button></figcaption></figure></div>
+<div class="save-bar"><button type="button" class="save-all" data-name="kumap-20261101-2330.zip" hidden>5枚まとめて保存（zip）</button></div>
 <div class="caption">
   <div class="caption-bar"><span>キャプション</span><button type="button" class="copy">コピー</button></div>
   <pre>2027年4月に熊本大学へ入学予定で、きょうだいの多いご家庭の方へのお知らせです。
@@ -218,6 +224,7 @@ button:focus-visible { outline:2px solid var(--red); outline-offset:2px; }
 <figcaption><span>3 / 5</span><button type="button" class="save" data-src="posts/20261101-2318/3.jpg" data-name="kumap-20261101-2318-3.jpg" hidden>保存</button></figcaption></figure><figure class="slide"><img src="posts/20261101-2318/4.jpg" alt="紫熊祭は 11/3まで！ 4枚目" loading="lazy" width="1080" height="1350">
 <figcaption><span>4 / 5</span><button type="button" class="save" data-src="posts/20261101-2318/4.jpg" data-name="kumap-20261101-2318-4.jpg" hidden>保存</button></figcaption></figure><figure class="slide"><img src="posts/20261101-2318/5.jpg" alt="紫熊祭は 11/3まで！ 5枚目" loading="lazy" width="1080" height="1350">
 <figcaption><span>5 / 5</span><button type="button" class="save" data-src="posts/20261101-2318/5.jpg" data-name="kumap-20261101-2318-5.jpg" hidden>保存</button></figcaption></figure></div>
+<div class="save-bar"><button type="button" class="save-all" data-name="kumap-20261101-2318.zip" hidden>5枚まとめて保存（zip）</button></div>
 <div class="caption">
   <div class="caption-bar"><span>キャプション</span><button type="button" class="copy">コピー</button></div>
   <pre>第十五回紫熊祭は、11月3日(火・祝)まで開催しています。
@@ -264,11 +271,87 @@ button:focus-visible { outline:2px solid var(--red); outline-offset:2px; }
           await downloads.save({ filename: btn.dataset.name, data: blob });
           notify("保存しました");
         } catch (err) {
-          if (err && err.code === "declined") return;
-          notify(err && err.code === "rate_limited" ? "前の保存が終わってからもう一度押してください" : "保存できませんでした。画像を長押しして保存してください");
+          notifySaveError(err);
+        }
+      });
+    });
+    document.querySelectorAll(".save-all").forEach((btn) => {
+      btn.hidden = false;
+      btn.addEventListener("click", async () => {
+        btn.disabled = true;
+        try {
+          const sources = [...btn.closest(".post").querySelectorAll(".save")];
+          const files = await Promise.all(sources.map(async (s) => {
+            const res = await fetch(s.dataset.src);
+            if (!res.ok) throw new Error("fetch " + s.dataset.src + " " + res.status);
+            return { name: s.dataset.name, data: new Uint8Array(await res.arrayBuffer()) };
+          }));
+          await downloads.save({ filename: btn.dataset.name, data: makeZip(files) });
+          notify(files.length + "枚を保存しました");
+        } catch (err) {
+          notifySaveError(err);
+        } finally {
+          btn.disabled = false;
         }
       });
     });
   });
+
+  function notifySaveError(err) {
+    if (err && err.code === "declined") return;
+    notify(err && err.code === "rate_limited" ? "前の保存が終わってからもう一度押してください" : "保存できませんでした。画像を長押しして保存してください");
+  }
+
+  function makeZip(files) {
+  const table = Array.from({ length: 256 }, (_, n) => {
+    let c = n;
+    for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+    return c >>> 0;
+  });
+  const crc32 = (bytes) => {
+    let c = 0xffffffff;
+    for (const b of bytes) c = table[(c ^ b) & 255] ^ (c >>> 8);
+    return (c ^ 0xffffffff) >>> 0;
+  };
+  const DOS_DATE_1980_01_01 = 0x21;
+  const enc = new TextEncoder();
+  const locals = [];
+  const centrals = [];
+  let offset = 0;
+  for (const file of files) {
+    const name = enc.encode(file.name);
+    const crc = crc32(file.data);
+    const size = file.data.length;
+    const local = new DataView(new ArrayBuffer(30));
+    local.setUint32(0, 0x04034b50, true);
+    local.setUint16(4, 20, true);
+    local.setUint16(12, DOS_DATE_1980_01_01, true);
+    local.setUint32(14, crc, true);
+    local.setUint32(18, size, true);
+    local.setUint32(22, size, true);
+    local.setUint16(26, name.length, true);
+    locals.push(local, name, file.data);
+    const central = new DataView(new ArrayBuffer(46));
+    central.setUint32(0, 0x02014b50, true);
+    central.setUint16(4, 20, true);
+    central.setUint16(6, 20, true);
+    central.setUint16(14, DOS_DATE_1980_01_01, true);
+    central.setUint32(16, crc, true);
+    central.setUint32(20, size, true);
+    central.setUint32(24, size, true);
+    central.setUint16(28, name.length, true);
+    central.setUint32(42, offset, true);
+    centrals.push(central, name);
+    offset += 30 + name.length + size;
+  }
+  const centralSize = centrals.reduce((sum, part) => sum + part.byteLength, 0);
+  const end = new DataView(new ArrayBuffer(22));
+  end.setUint32(0, 0x06054b50, true);
+  end.setUint16(8, files.length, true);
+  end.setUint16(10, files.length, true);
+  end.setUint32(12, centralSize, true);
+  end.setUint32(16, offset, true);
+  return new Blob([...locals, ...centrals, end], { type: "application/zip" });
+}
 })();
 </script>
